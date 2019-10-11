@@ -5,6 +5,8 @@ class_name OrbitCamera
 # External var
 export var SCROLL_SPEED = 10
 export var DEFAULT_DISTANCE = 20
+export var ROTATE_SPEED = 5
+export var ANCHOR_NODE_PATH: NodePath
 
 # Event var
 var _move_speed: Vector2
@@ -13,10 +15,12 @@ var _scroll_speed: int
 # Transform var
 var _rotation: Vector3
 var _distance: float
+var _anchor_node: Spatial
 
 func _ready():
 	_rotation = self.transform.basis.get_rotation_quat().get_euler()
 	_distance = DEFAULT_DISTANCE
+	_anchor_node = self.get_node(ANCHOR_NODE_PATH) as Spatial
 	pass
 
 func _process(delta: float):
@@ -25,8 +29,8 @@ func _process(delta: float):
 
 func _process_transformation(delta: float):
 	# Update rotation
-	_rotation.x += _move_speed.y * delta
-	_rotation.y += _move_speed.x * delta
+	_rotation.x += -_move_speed.y * delta * ROTATE_SPEED
+	_rotation.y += -_move_speed.x * delta * ROTATE_SPEED
 	if _rotation.x < -PI/2:
 		_rotation.x = -PI/2
 	if _rotation.x > PI/2:
@@ -40,8 +44,11 @@ func _process_transformation(delta: float):
 	_scroll_speed = 0
 	
 	self.set_identity()
-	self.translate_object_local(Vector3(cos(_rotation.y) * _distance, sin(_rotation.x) * _distance, sin(_rotation.y) * _distance))
-	self.look_at(Vector3(0,0,0), Vector3.UP)
+	self.translate_object_local(Vector3(0,0,_distance))
+	_anchor_node.set_identity()
+	var t = Quat()
+	t.set_euler(_rotation);
+	_anchor_node.transform.basis = Basis(t)
 	pass
 
 func _unhandled_input(event):
