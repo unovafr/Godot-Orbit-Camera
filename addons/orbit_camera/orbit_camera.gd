@@ -3,9 +3,9 @@ extends Camera
 class_name OrbitCamera
 
 # External var
-export var SCROLL_SPEED = 10
-export var DEFAULT_DISTANCE = 20
-export var ROTATE_SPEED = 5
+export var SCROLL_SPEED:float = 10
+export var DEFAULT_DISTANCE:float = 20
+export var ROTATE_SPEED: float = 10
 export var ANCHOR_NODE_PATH: NodePath
 
 # Event var
