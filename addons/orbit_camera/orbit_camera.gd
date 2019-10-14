@@ -3,14 +3,17 @@ extends Camera
 class_name OrbitCamera
 
 # External var
-export var SCROLL_SPEED:float = 10
-export var DEFAULT_DISTANCE:float = 20
+export var SCROLL_SPEED: float = 10
+export var DEFAULT_DISTANCE: float = 20
 export var ROTATE_SPEED: float = 10
 export var ANCHOR_NODE_PATH: NodePath
+export var MOUSE_ZOOM_SPEED: float = 10
 
 # Event var
 var _move_speed: Vector2
 var _scroll_speed: int
+var _touches: Dictionary
+var _old_touche_dist: float
 
 # Transform var
 var _rotation: Vector3
@@ -51,13 +54,15 @@ func _process_transformation(delta: float):
 	_anchor_node.transform.basis = Basis(t)
 	pass
 
-func _unhandled_input(event):
+func _input(event):
 	if event is InputEventScreenDrag:
 		_process_touch_rotation_event(event)
 	elif event is InputEventMouseMotion:
 		_process_mouse_rotation_event(event)
 	elif event is InputEventMouseButton:
 		_process_mouse_scroll_event(event)
+	elif event is InputEventScreenTouch:
+		_process_touch_zoom_event(event)
 	pass
 
 func _process_mouse_rotation_event(e: InputEventMouseMotion):
@@ -73,5 +78,24 @@ func _process_mouse_scroll_event(e: InputEventMouseButton):
 	pass
 
 func _process_touch_rotation_event(e: InputEventScreenDrag):
-	_move_speed = e.relative
-	pass
+	if _touches.has(e.index):
+		_touches[e.index] = e.position
+	if _touches.size() == 2:
+		var _keys = _touches.keys()
+		var _pos_finger_1 = _touches[_keys[0]] as Vector2
+		var _pos_finger_2 = _touches[_keys[1]] as Vector2
+		var _dist = _pos_finger_1.distance_to(_pos_finger_2)
+		if _old_touche_dist != -1:
+			_scroll_speed = (_dist - _old_touche_dist) * MOUSE_ZOOM_SPEED
+		_old_touche_dist = _dist
+	elif _touches.size() < 2:
+		_old_touche_dist = -1
+		_move_speed = e.relative
+	
+func _process_touch_zoom_event(e: InputEventScreenTouch):
+	if e.pressed:
+		if not _touches.has(e.index):
+			_touches[e.index] = e.position
+	else:
+		if _touches.has(e.index):
+			_touches.erase(e.index)
