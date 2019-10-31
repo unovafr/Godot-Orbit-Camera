@@ -1,7 +1,5 @@
 extends Camera
 
-class_name OrbitCamera
-
 # External var
 export var SCROLL_SPEED: float = 10
 export var DEFAULT_DISTANCE: float = 20
