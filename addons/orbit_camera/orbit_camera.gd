@@ -1,7 +1,5 @@
 extends Camera
 
-class_name OrbitCamera
-
 # External var
 export var SCROLL_SPEED: float = 10
 export var DEFAULT_DISTANCE: float = 20
@@ -11,7 +9,7 @@ export var MOUSE_ZOOM_SPEED: float = 10
 
 # Event var
 var _move_speed: Vector2
-var _scroll_speed: int
+var _scroll_speed: float
 var _touches: Dictionary
 var _old_touche_dist: float
 
@@ -23,12 +21,10 @@ var _anchor_node: Spatial
 func _ready():
 	_rotation = self.transform.basis.get_rotation_quat().get_euler()
 	_distance = DEFAULT_DISTANCE
-	_anchor_node = self.get_node(ANCHOR_NODE_PATH) as Spatial
-	pass
+	_anchor_node = self.get_node(ANCHOR_NODE_PATH) 
 
 func _process(delta: float):
 	_process_transformation(delta)
-	pass
 
 func _process_transformation(delta: float):
 	# Update rotation
@@ -52,7 +48,6 @@ func _process_transformation(delta: float):
 	var t = Quat()
 	t.set_euler(_rotation);
 	_anchor_node.transform.basis = Basis(t)
-	pass
 
 func _input(event):
 	if event is InputEventScreenDrag:
@@ -63,19 +58,16 @@ func _input(event):
 		_process_mouse_scroll_event(event)
 	elif event is InputEventScreenTouch:
 		_process_touch_zoom_event(event)
-	pass
 
 func _process_mouse_rotation_event(e: InputEventMouseMotion):
 	if Input.is_mouse_button_pressed(BUTTON_LEFT):
 		_move_speed = e.relative
-	pass
 
 func _process_mouse_scroll_event(e: InputEventMouseButton):
 	if e.button_index == BUTTON_WHEEL_UP:
 		_scroll_speed = -1 * SCROLL_SPEED
 	elif e.button_index == BUTTON_WHEEL_DOWN:
 		_scroll_speed = 1 * SCROLL_SPEED
-	pass
 
 func _process_touch_rotation_event(e: InputEventScreenDrag):
 	if _touches.has(e.index):
@@ -97,5 +89,6 @@ func _process_touch_zoom_event(e: InputEventScreenTouch):
 		if not _touches.has(e.index):
 			_touches[e.index] = e.position
 	else:
-		if _touches.has(e.index):
+		if _touches.has(e.index):	
+			# warning-ignore:return_value_discarded
 			_touches.erase(e.index)
