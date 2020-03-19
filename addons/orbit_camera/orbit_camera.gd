@@ -1,8 +1,9 @@
 extends Camera
 
 # External var
-export var SCROLL_SPEED: float = 10
-export var DEFAULT_DISTANCE: float = 20
+export var SCROLL_SPEED: float = 10 # Speed when use scroll mouse
+export var ZOOM_SPEED: float = 5 # Speed use when is_zoom_in or is_zoom_out is true
+export var DEFAULT_DISTANCE: float = 20 # Default distance of the Node
 export var ROTATE_SPEED: float = 10
 export var ANCHOR_NODE_PATH: NodePath
 export var MOUSE_ZOOM_SPEED: float = 10
@@ -12,6 +13,9 @@ var _move_speed: Vector2
 var _scroll_speed: float
 var _touches: Dictionary
 var _old_touche_dist: float
+# Use to add posibility to updated zoom with external script
+var is_zoom_in: bool
+var is_zoom_out: bool
 
 # Transform var
 var _rotation: Vector3
@@ -24,6 +28,10 @@ func _ready():
 	_anchor_node = self.get_node(ANCHOR_NODE_PATH) 
 
 func _process(delta: float):
+	if is_zoom_in:
+		_scroll_speed = -1 * ZOOM_SPEED
+	if is_zoom_out:
+		_scroll_speed = 1 * ZOOM_SPEED
 	_process_transformation(delta)
 
 func _process_transformation(delta: float):
