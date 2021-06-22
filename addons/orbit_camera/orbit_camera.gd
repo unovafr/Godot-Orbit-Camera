@@ -23,9 +23,9 @@ var _distance: float
 var _anchor_node: Spatial
 
 func _ready():
-	_rotation = self.transform.basis.get_rotation_quat().get_euler()
 	_distance = DEFAULT_DISTANCE
-	_anchor_node = self.get_node(ANCHOR_NODE_PATH) 
+	_anchor_node = self.get_node(ANCHOR_NODE_PATH)
+	_rotation = _anchor_node.transform.basis.get_rotation_quat().get_euler()
 
 func _process(delta: float):
 	if is_zoom_in:
