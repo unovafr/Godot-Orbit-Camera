@@ -6,9 +6,9 @@ This plugin adds an OrbitCamera node in the Godot Editor.
 
 ## In the Editor
 1. Enable OrbitCamera plugin in Project Settings > Plugins
-2. Add Spatial node (used for rotating the camera) into current scene
-3. Add OrbitCamera as a child of the Spatial node
-4. Set *Anchor Node* property of OrbitCamera to the Spatial node
+2. Add Node3D node (used for rotating the camera) into current scene
+3. Add OrbitCamera as a child of the Node3D node
+4. Set *Anchor Node* property of OrbitCamera to the Node3D node
 
 ## Controls (Mouse)
 - Hold Left Mouse Button to orbit around the *Anchor Node*
