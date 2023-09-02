@@ -1,12 +1,12 @@
-extends Camera
+extends Camera3D
 
 # External var
-export var SCROLL_SPEED: float = 10 # Speed when use scroll mouse
-export var ZOOM_SPEED: float = 5 # Speed use when is_zoom_in or is_zoom_out is true
-export var DEFAULT_DISTANCE: float = 20 # Default distance of the Node
-export var ROTATE_SPEED: float = 10
-export var ANCHOR_NODE_PATH: NodePath
-export var MOUSE_ZOOM_SPEED: float = 10
+@export var SCROLL_SPEED: float = 10 # Speed when use scroll mouse
+@export var ZOOM_SPEED: float = 5 # Speed use when is_zoom_in or is_zoom_out is true
+@export var DEFAULT_DISTANCE: float = 20 # Default distance of the Node
+@export var ROTATE_SPEED: float = 10
+@export var ANCHOR_NODE_PATH: NodePath
+@export var MOUSE_ZOOM_SPEED: float = 10
 
 # Event var
 var _move_speed: Vector2
@@ -20,12 +20,12 @@ var is_zoom_out: bool
 # Transform var
 var _rotation: Vector3
 var _distance: float
-var _anchor_node: Spatial
+var _anchor_node: Node3D
 
 func _ready():
 	_distance = DEFAULT_DISTANCE
 	_anchor_node = self.get_node(ANCHOR_NODE_PATH)
-	_rotation = _anchor_node.transform.basis.get_rotation_quat().get_euler()
+	_rotation = _anchor_node.transform.basis.get_rotation_quaternion().get_euler()
 
 func _process(delta: float):
 	if is_zoom_in:
@@ -53,7 +53,7 @@ func _process_transformation(delta: float):
 	self.set_identity()
 	self.translate_object_local(Vector3(0,0,_distance))
 	_anchor_node.set_identity()
-	var t = Quat()
+	var t = Quaternion()
 	t.set_euler(_rotation);
 	_anchor_node.transform.basis = Basis(t)
 
@@ -68,13 +68,13 @@ func _input(event):
 		_process_touch_zoom_event(event)
 
 func _process_mouse_rotation_event(e: InputEventMouseMotion):
-	if Input.is_mouse_button_pressed(BUTTON_LEFT):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		_move_speed = e.relative
 
 func _process_mouse_scroll_event(e: InputEventMouseButton):
-	if e.button_index == BUTTON_WHEEL_UP:
+	if e.button_index == MOUSE_BUTTON_WHEEL_UP:
 		_scroll_speed = -1 * SCROLL_SPEED
-	elif e.button_index == BUTTON_WHEEL_DOWN:
+	elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		_scroll_speed = 1 * SCROLL_SPEED
 
 func _process_touch_rotation_event(e: InputEventScreenDrag):
