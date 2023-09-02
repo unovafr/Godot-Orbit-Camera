@@ -53,9 +53,7 @@ func _process_transformation(delta: float):
 	self.set_identity()
 	self.translate_object_local(Vector3(0,0,_distance))
 	_anchor_node.set_identity()
-	var t = Quaternion()
-	t.set_euler(_rotation);
-	_anchor_node.transform.basis = Basis(t)
+	_anchor_node.transform.basis = Basis(Quaternion.from_euler(_rotation))
 
 func _input(event):
 	if event is InputEventScreenDrag:
