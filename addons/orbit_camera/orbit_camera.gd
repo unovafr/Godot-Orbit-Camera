@@ -7,6 +7,7 @@ extends Camera3D
 @export var ROTATE_SPEED: float = 10
 @export var ANCHOR_NODE_PATH: NodePath
 @export var MOUSE_ZOOM_SPEED: float = 10
+@export var TOUCH_INVERT_ZOOM: bool = false
 
 # Event var
 var _move_speed: Vector2
@@ -85,6 +86,8 @@ func _process_touch_rotation_event(e: InputEventScreenDrag):
 		var _dist = _pos_finger_1.distance_to(_pos_finger_2)
 		if _old_touche_dist != -1:
 			_scroll_speed = (_dist - _old_touche_dist) * MOUSE_ZOOM_SPEED
+		if TOUCH_INVERT_ZOOM:
+			_scroll_speed = -1 * _scroll_speed
 		_old_touche_dist = _dist
 	elif _touches.size() < 2:
 		_old_touche_dist = -1
