@@ -17,3 +17,7 @@ This plugin adds an OrbitCamera node in the Godot Editor.
 ## Controls (Touch)
 - Single touch drag to orbit around the *Anchor Node*
 - Pinch gesture to change the distance to *Anchor Node*
+
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=unovafr/Godot-Orbit-Camera&type=Date)](https://star-history.com/#unovafr/Godot-Orbit-Camera&Date)
